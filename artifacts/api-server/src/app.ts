@@ -11,6 +11,8 @@ const PgStore = connectPgSimple(session);
 
 const app: Express = express();
 
+app.set("trust proxy", 1);
+
 app.use(
   pinoHttp({
     logger,
@@ -36,13 +38,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    store: new PgStore({ pool, createTableIfMissing: true }),
+    store: new PgStore({ pool }),
     secret: process.env.SESSION_SECRET ?? "fallback-secret-change-in-prod",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       httpOnly: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000, // 24h
     },
   }),

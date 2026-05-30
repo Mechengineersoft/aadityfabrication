@@ -1,6 +1,6 @@
-# [Project name]
+# Aaditya Fabrication Works
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A production website for Aaditya Fabrication Works — a heavy industrial fabrication company in Bangalore (EOT cranes, industrial sheds, gantry cranes) with a public-facing site and a session-authenticated admin panel.
 
 ## Run & Operate
 

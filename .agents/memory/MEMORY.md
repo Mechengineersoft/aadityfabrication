@@ -1,0 +1,1 @@
+- [Session auth with connect-pg-simple + esbuild](session-pg-simple-esbuild.md) — createTableIfMissing breaks after bundling; must pre-create table and configure cookies for Replit proxy

@@ -39,7 +39,14 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.adminEmail = admin.email;
-    res.json({ authenticated: true, email: admin.email });
+    req.session.save((err) => {
+      if (err) {
+        req.log.error(err, "session save failed");
+        res.status(500).json({ error: "Session error" });
+        return;
+      }
+      res.json({ authenticated: true, email: admin.email });
+    });
   } catch (err) {
     req.log.error(err);
     res.status(500).json({ error: "Internal server error" });

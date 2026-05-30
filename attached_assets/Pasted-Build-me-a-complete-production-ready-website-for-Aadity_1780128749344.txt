@@ -1,0 +1,122 @@
+Build me a complete, production-ready website for "Aaditya Fabrication Works" - a legitimate industrial fabrication company in Bangalore with 12 years of business.
+
+## EXACT BUSINESS DETAILS (From Justdial):
+- Business Name: Aaditya Fabrication Works
+- Business Type: Fabricators & Shed Fabricators (Manufacturer)
+- Location: Beside Nandana Layout, Kallubalu, Bangalore
+- Years in Business: 12 Years
+- Status: Claimed business (verified)
+- Hours: Open until 6:00 pm
+- Categories: Industrial fabrication, crane manufacturing, shed fabrication
+
+## SERVICES THEY OFFER (Based on my earlier description + fabrication focus):
+1. EOT Cranes (Electric Overhead Traveling) - manufacturing, supply, installation
+2. Industrial Sheds & Company Sheds - complete fabrication
+3. Shed Rework & Modification - repair, expansion, reinforcement
+4. Crane Rework & Modernization - electrical retrofitting, mechanical repairs
+5. Gantry Cranes - new manufacturing and rework/repair
+6. General Fabrication Work (as a "Fabricators" category)
+
+## WHAT I NEED (Full Stack Application)
+
+### Frontend Requirements:
+
+**Design Style:**
+- Industrial/professional theme (dark blue, steel grey, orange accents for safety)
+- Clean, trustworthy aesthetic (12 years in business = reliability)
+- Mobile-first responsive (engineers and site managers use phones)
+- Fast loading (Next.js with image optimization)
+
+**Required Pages:**
+
+1. **Homepage**
+   - Hero section: "Aaditya Fabrication Works - 12 Years of Excellence in Bangalore"
+   - Subtitle: "EOT Cranes | Industrial Sheds | Gantry Rework | Fabrication"
+   - Trust badge: "12 Years in Business" prominently displayed
+   - Location: "Kallubalu, Bangalore"
+   - Services overview grid (6 services as listed above)
+   - Call-to-action: "Get a Free Quote" button
+   - Footer with business hours: "Open until 6:00 pm"
+
+2. **Services Page**
+   - Detailed page for each service:
+     - EOT Cranes (specs: capacity tonnes, span meters, lift height)
+     - Industrial Sheds (specs: dimensions, material thickness, wind load)
+     - Shed Rework (what they repair/modify)
+     - Crane Rework (panel upgrades, VFD, end carriages)
+     - Gantry Cranes (mobile/fixed, capacities)
+     - General Fabrication (custom work)
+   - Each service has a "Request Quote" button
+
+3. **Products/Cranes Page**
+   - Showcase different crane capacities (5T, 10T, 20T, 50T)
+   - Technical specifications table
+   - PDF brochure download placeholder
+
+4. **Projects Gallery**
+   - Before/after slider for rework jobs
+   - Grid of completed shed and crane installations
+   - Filter by service type (EOT, Shed, Gantry, Rework)
+
+5. **About Us Page**
+   - Company background: "12 years serving Bangalore's industrial sector"
+   - Location: Beside Nandana Layout, Kallubalu
+   - Manufacturing facility info
+   - Team/experience highlights
+
+6. **Contact & Inquiry Page**
+   - Physical address: Beside Nandana Layout, Kallubalu, Bangalore
+   - Business hours: Open until 6:00 pm
+   - Phone number (show placeholder: +91XXXXXXXXXX)
+   - Enquiry form with specific fields:
+     - Name, Company Name, Phone, Email
+     - Service Required (dropdown: EOT Crane/Shed Construction/Shed Rework/Crane Rework/Gantry/Fabrication)
+     - For Cranes: "Required Capacity (Tonnes)" and "Span (Meters)"
+     - For Sheds: "Shed Dimensions (L x W x H)"
+     - For Rework: "Existing Equipment Make & Age"
+     - Upload drawing/file (optional)
+     - Message
+   - Success message: "Thank you. We will respond within 24 hours"
+
+7. **Admin Dashboard** (password protected)
+   - View all inquiries with search/filter
+   - Mark as read/unread
+   - Export to CSV
+   - Add/edit portfolio projects
+   - Update service information
+   - Simple analytics (inquiry count by service type)
+
+### Backend Requirements:
+
+**Database (Supabase - Free Tier):**
+Create tables for:
+- `inquiries` (all contact form submissions)
+- `projects` (portfolio items with before/after images)
+- `services` (service details editable via admin)
+
+**Email Functionality:**
+- Use Resend (free tier - 3000 emails/month)
+- Send confirmation email to client when they submit inquiry
+- Send notification email to company owner
+
+**File Storage:**
+- Supabase Storage for project images
+- Upload folder for inquiry attachments (DWG, PDF)
+
+### Special Industrial Features (Crucial for Crane/Shed Business):
+
+1. **Load Chart Calculator** (simple version):
+   - User selects Capacity (Tonnes) and Span (Meters)
+   - Shows recommended crane model
+   - Generates a "Request Quote" with pre-filled specs
+
+2. **Shed Estimator** (optional but impressive):
+   - Input Length, Width, Height
+   - Shows approximate material estimate
+   - Leads to inquiry form
+
+3. **PDF Generation** (for quotes):
+   - Admin can generate PDF summary of inquiry
+   - Includes client details and technical specs
+
+### Technical Stack (Must Work on Replit):

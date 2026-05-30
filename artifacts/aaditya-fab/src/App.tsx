@@ -2,17 +2,39 @@ import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import HomePage from "@/pages/HomePage";
+import ServicesPage from "@/pages/ServicesPage";
+import ProductsPage from "@/pages/ProductsPage";
+import ProjectsPage from "@/pages/ProjectsPage";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
+import AdminLoginPage from "@/pages/AdminLoginPage";
+import AdminDashboardPage from "@/pages/AdminDashboardPage";
+import AdminProjectsPage from "@/pages/AdminProjectsPage";
+import NotFound from "@/pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 30_000, retry: 1 },
+  },
+});
 
-function Home() {
+const ADMIN_ROUTES = ["/admin", "/admin/dashboard", "/admin/projects"];
+
+function isAdminRoute(path: string) {
+  return ADMIN_ROUTES.some((r) => path === r || path.startsWith(r + "/"));
+}
+
+function Layout({ children }: { children: React.ReactNode }) {
+  const path = window.location.pathname;
+  const admin = isAdminRoute(path);
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Replit Agent is building...</h1>
-        <p className="mt-2 text-sm text-gray-600">Your app will appear here once it's ready.</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      {!admin && <Navbar />}
+      <main className="flex-1">{children}</main>
+      {!admin && <Footer />}
     </div>
   );
 }
@@ -20,7 +42,15 @@ function Home() {
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={HomePage} />
+      <Route path="/services" component={ServicesPage} />
+      <Route path="/products" component={ProductsPage} />
+      <Route path="/projects" component={ProjectsPage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route path="/admin" component={AdminLoginPage} />
+      <Route path="/admin/dashboard" component={AdminDashboardPage} />
+      <Route path="/admin/projects" component={AdminProjectsPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -31,7 +61,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <Layout>
+            <Router />
+          </Layout>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

@@ -3,20 +3,27 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Aaditya Fabrication Works API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: inquiries
+    description: Contact form inquiries
+  - name: projects
+    description: Portfolio projects
+  - name: services
+    description: Services offered
+  - name: admin
+    description: Admin operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +31,372 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # --- INQUIRIES ---
+  /inquiries:
+    get:
+      operationId: listInquiries
+      tags: [inquiries]
+      summary: List all inquiries (admin)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [all, read, unread]
+        - name: service
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of inquiries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InquiryList"
+    post:
+      operationId: createInquiry
+      tags: [inquiries]
+      summary: Submit a new inquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InquiryInput"
+      responses:
+        "201":
+          description: Inquiry created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Inquiry"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /inquiries/stats:
+    get:
+      operationId: getInquiryStats
+      tags: [inquiries]
+      summary: Get inquiry statistics
+      responses:
+        "200":
+          description: Inquiry statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InquiryStats"
+
+  /inquiries/export:
+    get:
+      operationId: exportInquiries
+      tags: [inquiries]
+      summary: Export inquiries as CSV
+      responses:
+        "200":
+          description: CSV export
+          content:
+            text/csv:
+              schema:
+                type: string
+
+  /inquiries/{id}:
+    get:
+      operationId: getInquiry
+      tags: [inquiries]
+      summary: Get a single inquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inquiry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Inquiry"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateInquiry
+      tags: [inquiries]
+      summary: Update inquiry (mark read/unread, add notes)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InquiryUpdate"
+      responses:
+        "200":
+          description: Updated inquiry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Inquiry"
+    delete:
+      operationId: deleteInquiry
+      tags: [inquiries]
+      summary: Delete an inquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # --- PROJECTS ---
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List portfolio projects
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new project (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectInput"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/{id}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get a project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # --- SERVICES ---
+  /services:
+    get:
+      operationId: listServices
+      tags: [services]
+      summary: List all services
+      responses:
+        "200":
+          description: List of services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+    post:
+      operationId: createService
+      tags: [services]
+      summary: Create a service (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "201":
+          description: Created service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+
+  /services/{id}:
+    patch:
+      operationId: updateService
+      tags: [services]
+      summary: Update a service (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceUpdate"
+      responses:
+        "200":
+          description: Updated service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+
+  # --- ADMIN AUTH ---
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/me:
+    get:
+      operationId: getAdminSession
+      tags: [admin]
+      summary: Get current admin session
+      responses:
+        "200":
+          description: Session info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +407,277 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    # --- INQUIRY ---
+    Inquiry:
+      type: object
+      required: [id, name, phone, email, service, status, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        companyName:
+          type: ["string", "null"]
+        phone:
+          type: string
+        email:
+          type: string
+        service:
+          type: string
+        message:
+          type: ["string", "null"]
+        requiredCapacity:
+          type: ["number", "null"]
+        spanMeters:
+          type: ["number", "null"]
+        shedDimensions:
+          type: ["string", "null"]
+        existingEquipment:
+          type: ["string", "null"]
+        adminNotes:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [unread, read]
+        createdAt:
+          type: string
+
+    InquiryList:
+      type: object
+      required: [data, total, page, limit]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Inquiry"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    InquiryInput:
+      type: object
+      required: [name, phone, email, service]
+      properties:
+        name:
+          type: string
+          minLength: 2
+        companyName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        service:
+          type: string
+        message:
+          type: string
+        requiredCapacity:
+          type: number
+        spanMeters:
+          type: number
+        shedDimensions:
+          type: string
+        existingEquipment:
+          type: string
+
+    InquiryUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [unread, read]
+        adminNotes:
+          type: string
+
+    InquiryStats:
+      type: object
+      required: [total, unread, byService, recentCount]
+      properties:
+        total:
+          type: integer
+        unread:
+          type: integer
+        recentCount:
+          type: integer
+        byService:
+          type: array
+          items:
+            type: object
+            required: [service, count]
+            properties:
+              service:
+                type: string
+              count:
+                type: integer
+
+    # --- PROJECT ---
+    Project:
+      type: object
+      required: [id, title, category, description, featured, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        beforeImage:
+          type: ["string", "null"]
+        afterImage:
+          type: ["string", "null"]
+        location:
+          type: ["string", "null"]
+        year:
+          type: ["integer", "null"]
+        specs:
+          type: ["string", "null"]
+        featured:
+          type: boolean
+        createdAt:
+          type: string
+
+    ProjectInput:
+      type: object
+      required: [title, category, description]
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        beforeImage:
+          type: string
+        afterImage:
+          type: string
+        location:
+          type: string
+        year:
+          type: integer
+        specs:
+          type: string
+        featured:
+          type: boolean
+
+    ProjectUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        beforeImage:
+          type: string
+        afterImage:
+          type: string
+        location:
+          type: string
+        year:
+          type: integer
+        specs:
+          type: string
+        featured:
+          type: boolean
+
+    # --- SERVICE ---
+    Service:
+      type: object
+      required: [id, name, slug, shortDescription, fullDescription, icon, sortOrder]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        icon:
+          type: string
+        specs:
+          type: ["string", "null"]
+        sortOrder:
+          type: integer
+
+    ServiceInput:
+      type: object
+      required: [name, slug, shortDescription, fullDescription, icon]
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        icon:
+          type: string
+        specs:
+          type: string
+        sortOrder:
+          type: integer
+
+    ServiceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        icon:
+          type: string
+        specs:
+          type: string
+        sortOrder:
+          type: integer
+
+    # --- ADMIN ---
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    AdminSession:
+      type: object
+      required: [authenticated, email]
+      properties:
+        authenticated:
+          type: boolean
+        email:
+          type: string

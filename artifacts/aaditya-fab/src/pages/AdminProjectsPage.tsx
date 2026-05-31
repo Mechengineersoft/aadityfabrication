@@ -127,7 +127,7 @@ export default function AdminProjectsPage() {
           </Link>
           <span className="font-bold text-sm">Manage Projects</span>
         </div>
-        <Button size="sm" variant="ghost" onClick={() => logout.mutate(undefined, { onSuccess: () => setLocation("/admin") })} className="text-white/70 hover:text-white h-7 text-xs">
+        <Button size="sm" variant="ghost" onClick={() => logout.mutate(undefined, { onSuccess: () => { queryClient.clear(); setLocation("/admin"); } })} className="text-white/70 hover:text-white h-7 text-xs">
           <LogOut className="w-3.5 h-3.5 mr-1" /> Logout
         </Button>
       </div>

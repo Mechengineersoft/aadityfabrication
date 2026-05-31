@@ -10,6 +10,7 @@ import {
   DeleteInquiryParams,
 } from "@workspace/api-zod";
 import { sendWhatsAppNotification } from "../lib/whatsapp";
+import { sendEmailNotification } from "../lib/mailer";
 
 const router = Router();
 
@@ -99,9 +100,12 @@ router.post("/", async (req, res) => {
       .values({ ...parsed.data, ipAddress: ip, status: "unread" })
       .returning();
 
-    // Fire-and-forget — don't let WhatsApp failure block the response
+    // Fire-and-forget — don't let notification failures block the response
     sendWhatsAppNotification(parsed.data).catch((err) =>
       req.log.error(err, "WhatsApp notification failed"),
+    );
+    sendEmailNotification(parsed.data).catch((err) =>
+      req.log.error(err, "Email notification failed"),
     );
 
     res.status(201).json(inquiry);

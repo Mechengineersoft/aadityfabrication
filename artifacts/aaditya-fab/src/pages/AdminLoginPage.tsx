@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Wrench, Lock } from "lucide-react";
+import { Wrench, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ type FormValues = z.infer<typeof schema>;
 
 export default function AdminLoginPage() {
   const [, setLocation] = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     document.title = "Admin Login | Aaditya Fabrication Works";
@@ -75,14 +76,24 @@ export default function AdminLoginPage() {
             </div>
             <div>
               <Label htmlFor="password" className="text-sm font-medium">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                className="mt-1"
-                autoComplete="current-password"
-                data-testid="input-admin-password"
-                {...form.register("password")}
-              />
+              <div className="relative mt-1">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className="pr-10"
+                  autoComplete="current-password"
+                  data-testid="input-admin-password"
+                  {...form.register("password")}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setShowPassword((v) => !v)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {form.formState.errors.password && (
                 <p className="text-destructive text-xs mt-1">{form.formState.errors.password.message}</p>
               )}

@@ -80,6 +80,31 @@ export default function ContactPage() {
 
   const createInquiry = useCreateInquiry();
 
+  const sendWhatsApp = (data: FormValues) => {
+    const lines: string[] = [
+      "🔔 *New Enquiry – Aaditya Fabrication Works*",
+      "",
+      `*Name:* ${data.name}`,
+    ];
+    if (data.companyName) lines.push(`*Company:* ${data.companyName}`);
+    lines.push(`*Phone:* ${data.phone}`);
+    lines.push(`*Email:* ${data.email}`);
+    lines.push(`*Service:* ${data.service}`);
+    if (isCrane && data.requiredCapacity) lines.push(`*Capacity Required:* ${data.requiredCapacity} Tonnes`);
+    if (isCrane && data.spanMeters) lines.push(`*Span:* ${data.spanMeters} metres`);
+    if (isShed && data.shedDimensions) lines.push(`*Shed Dimensions:* ${data.shedDimensions}`);
+    if (isRework && data.existingEquipment) lines.push(`*Existing Equipment:* ${data.existingEquipment}`);
+    if (data.message) {
+      lines.push("");
+      lines.push(`*Details:* ${data.message}`);
+    }
+    lines.push("");
+    lines.push("_Submitted via website_");
+
+    const text = encodeURIComponent(lines.join("\n"));
+    window.open(`https://wa.me/916299649429?text=${text}`, "_blank");
+  };
+
   const onSubmit = (data: FormValues) => {
     const payload: InquiryInput = {
       name: data.name,
@@ -96,7 +121,12 @@ export default function ContactPage() {
 
     createInquiry.mutate(
       { data: payload },
-      { onSuccess: () => setSubmitted(true) },
+      {
+        onSuccess: () => {
+          sendWhatsApp(data);
+          setSubmitted(true);
+        },
+      },
     );
   };
 

@@ -93,7 +93,12 @@ export default function AdminDashboardPage() {
   };
 
   const handleLogout = () => {
-    logout.mutate(undefined, { onSuccess: () => setLocation("/admin") });
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.clear();
+        setLocation("/admin");
+      },
+    });
   };
 
   const handleExport = () => {

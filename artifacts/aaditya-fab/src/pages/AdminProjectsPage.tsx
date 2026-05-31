@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, Link } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Pencil, Trash2, X, LogOut } from "lucide-react";
+import { Plus, Pencil, Trash2, X, LogOut, Upload, ImageIcon } from "lucide-react";
+import { useUpload } from "@workspace/object-storage-web";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,70 @@ const projectSchema = z.object({
 type ProjectForm = z.infer<typeof projectSchema>;
 
 const CATEGORIES = ["EOT", "Shed", "Gantry", "Rework", "Fabrication"];
+
+function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const { uploadFile, isUploading, progress } = useUpload({
+    onSuccess: (res) => onChange(`/api/storage${res.objectPath}`),
+  });
+
+  return (
+    <div>
+      <Label className="text-sm font-medium">{label}</Label>
+      <div className="mt-1 space-y-2">
+        {/* Preview */}
+        {value && (
+          <div className="relative w-full h-28 bg-muted rounded-lg overflow-hidden border border-border">
+            <img src={value} alt="preview" className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="absolute top-1.5 right-1.5 bg-black/60 text-white rounded-full p-0.5 hover:bg-black/80"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </div>
+        )}
+        {!value && (
+          <div className="w-full h-28 bg-muted/40 rounded-lg border border-dashed border-border flex items-center justify-center">
+            <ImageIcon className="w-8 h-8 text-muted-foreground/40" />
+          </div>
+        )}
+
+        {/* URL input */}
+        <input
+          type="text"
+          className="w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder="Paste image URL…"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+
+        {/* Upload button */}
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) uploadFile(file);
+            e.target.value = "";
+          }}
+        />
+        <button
+          type="button"
+          disabled={isUploading}
+          onClick={() => fileRef.current?.click()}
+          className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-md border border-input bg-background hover:bg-muted transition-colors disabled:opacity-50 w-full justify-center"
+        >
+          <Upload className="w-3.5 h-3.5" />
+          {isUploading ? `Uploading… ${progress}%` : "Upload from device"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminProjectsPage() {
   const [, setLocation] = useLocation();
@@ -173,14 +238,16 @@ export default function AdminProjectsPage() {
                   <Textarea className="mt-1" rows={3} {...form.register("description")} />
                   {form.formState.errors.description && <p className="text-destructive text-xs mt-1">{form.formState.errors.description.message}</p>}
                 </div>
-                <div>
-                  <Label className="text-sm font-medium">Before Image URL</Label>
-                  <Input className="mt-1" placeholder="https://..." {...form.register("beforeImage")} />
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">After Image URL</Label>
-                  <Input className="mt-1" placeholder="https://..." {...form.register("afterImage")} />
-                </div>
+                <ImageField
+                  label="Before Image"
+                  value={form.watch("beforeImage") ?? ""}
+                  onChange={(url) => form.setValue("beforeImage", url)}
+                />
+                <ImageField
+                  label="After Image"
+                  value={form.watch("afterImage") ?? ""}
+                  onChange={(url) => form.setValue("afterImage", url)}
+                />
                 <div>
                   <Label className="text-sm font-medium">Location</Label>
                   <Input className="mt-1" placeholder="e.g. Whitefield, Bangalore" {...form.register("location")} />

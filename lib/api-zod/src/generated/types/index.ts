@@ -7,6 +7,7 @@
  */
 
 export * from './adminSession';
+export * from './errorEnvelope';
 export * from './errorResponse';
 export * from './healthStatus';
 export * from './inquiry';
@@ -28,3 +29,5 @@ export * from './service';
 export * from './serviceInput';
 export * from './serviceUpdate';
 export * from './successResponse';
+export * from './uploadUrlRequest';
+export * from './uploadUrlResponse';

@@ -1,14 +1,14 @@
-import { useState, useRef } from "react";
-import { Link } from "wouter";
+import { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUpload } from "@workspace/object-storage-web";
-import { Plus, Trash2, X, Upload, ImageIcon, ArrowUp, ArrowDown, Eye, EyeOff, LayoutDashboard, FolderOpen } from "lucide-react";
+import { Plus, Trash2, Upload, ImageIcon, ArrowUp, ArrowDown, Eye, EyeOff, LayoutDashboard, FolderOpen, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useGetAdminSession, useAdminLogout, getGetAdminSessionQueryKey } from "@workspace/api-client-react";
 
 interface HeroImage {
   id: number;
@@ -86,8 +86,20 @@ function ImageUploadField({ onAdd }: { onAdd: (url: string) => void }) {
 }
 
 export default function AdminHeroImagesPage() {
+  const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
-  const { data: images, isLoading } = useHeroImages();
+
+  const { data: session, isLoading: sessionLoading } = useGetAdminSession({
+    query: { queryKey: getGetAdminSessionQueryKey(), retry: false },
+  });
+  useEffect(() => {
+    if (!sessionLoading && !session?.authenticated) setLocation("/admin");
+  }, [session, sessionLoading, setLocation]);
+
+  const logout = useAdminLogout();
+
+  const { data: imagesRaw, isLoading } = useHeroImages();
+  const images = Array.isArray(imagesRaw) ? imagesRaw : [];
 
   const addImage = useMutation({
     mutationFn: (url: string) =>
@@ -146,6 +158,14 @@ export default function AdminHeroImagesPage() {
               <FolderOpen className="w-3.5 h-3.5" /> Projects
             </Button>
           </Link>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="gap-1.5 text-xs text-muted-foreground"
+            onClick={() => logout.mutate(undefined, { onSuccess: () => { queryClient.clear(); setLocation("/admin"); } })}
+          >
+            <LogOut className="w-3.5 h-3.5" /> Logout
+          </Button>
         </nav>
       </header>
 

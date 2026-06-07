@@ -1,6 +1,6 @@
-# Aaditya Fabrication Works
+# Aadity Fabrication Works
 
-A production website for Aaditya Fabrication Works — a heavy industrial fabrication company in Bangalore (EOT cranes, industrial sheds, gantry cranes) with a public-facing site and a session-authenticated admin panel.
+A production website for Aadity Fabrication Works — a heavy industrial fabrication company in Bangalore (EOT cranes, industrial sheds, gantry cranes) with a public-facing site and a session-authenticated admin panel.
 
 ## Run & Operate
 

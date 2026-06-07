@@ -40,7 +40,7 @@ function buildHtml(inq: InquiryDetails): string {
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
       <div style="background:#2C3E50;color:#fff;padding:16px 24px;border-radius:6px 6px 0 0">
-        <h2 style="margin:0;font-size:18px">🔔 New Enquiry – Aaditya Fabrication Works</h2>
+        <h2 style="margin:0;font-size:18px">🔔 New Enquiry – Aadity Fabrication Works</h2>
       </div>
       <div style="padding:20px 24px;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px">
         <table style="width:100%;border-collapse:collapse">${rows}</table>
@@ -52,7 +52,7 @@ function buildHtml(inq: InquiryDetails): string {
 
 function buildText(inq: InquiryDetails): string {
   const lines = [
-    "New Enquiry – Aaditya Fabrication Works",
+    "New Enquiry – Aadity Fabrication Works",
     "========================================",
     `Name: ${inq.name}`,
   ];
@@ -84,7 +84,7 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
   });
 
   await transporter.sendMail({
-    from: `"Aaditya Fabrication Works" <${OWNER_EMAIL}>`,
+    from: `"Aadity Fabrication Works" <${OWNER_EMAIL}>`,
     to: OWNER_EMAIL,
     subject: `New Enquiry: ${inq.service} – ${inq.name}`,
     text: buildText(inq),

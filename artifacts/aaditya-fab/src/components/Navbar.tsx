@@ -23,7 +23,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight">
             <Wrench className="w-6 h-6 text-accent" />
-            <span>Aaditya <span className="text-accent">Fabrication</span></span>
+            <span>Aadity <span className="text-accent">Fabrication</span></span>
           </Link>
 
           {/* Desktop nav */}

@@ -18,7 +18,7 @@ interface InquiryDetails {
 
 function buildMessage(inq: InquiryDetails): string {
   const lines: string[] = [
-    "🔔 *New Enquiry – Aaditya Fabrication Works*",
+    "🔔 *New Enquiry – Aadity Fabrication Works*",
     "",
     `*Name:* ${inq.name}`,
   ];

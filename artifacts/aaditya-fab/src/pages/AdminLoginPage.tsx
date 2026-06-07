@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    document.title = "Admin Login | Aaditya Fabrication Works";
+    document.title = "Admin Login | Aadity Fabrication Works";
   }, []);
 
   const { data: session } = useGetAdminSession({
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
             </div>
           </div>
           <CardTitle className="text-xl">Admin Panel</CardTitle>
-          <p className="text-sm text-muted-foreground">Aaditya Fabrication Works</p>
+          <p className="text-sm text-muted-foreground">Aadity Fabrication Works</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

@@ -34,7 +34,7 @@ export default function AdminDashboardPage() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   useEffect(() => {
-    document.title = "Admin Dashboard | Aaditya Fabrication Works";
+    document.title = "Admin Dashboard | Aadity Fabrication Works";
   }, []);
 
   const { data: session, isLoading: sessionLoading } = useGetAdminSession({

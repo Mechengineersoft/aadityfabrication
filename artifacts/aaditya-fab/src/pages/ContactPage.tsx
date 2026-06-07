@@ -60,12 +60,12 @@ export default function ContactPage() {
 
   useEffect(() => {
     document.title =
-      "Contact & Request Quote | Aaditya Fabrication Works Bangalore";
+      "Contact & Request Quote | Aadity Fabrication Works Bangalore";
     const meta = document.querySelector('meta[name="description"]');
     if (meta)
       meta.setAttribute(
         "content",
-        "Contact Aaditya Fabrication Works in Kallubalu, Bangalore. Request a free quote for EOT cranes, industrial sheds, gantry cranes, or fabrication work.",
+        "Contact Aadity Fabrication Works in Kallubalu, Bangalore. Request a free quote for EOT cranes, industrial sheds, gantry cranes, or fabrication work.",
       );
   }, []);
 

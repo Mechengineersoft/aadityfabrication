@@ -25,7 +25,7 @@ export default function ProductsPage() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    document.title = "EOT Crane Products | 5T to 50T | Aaditya Fabrication Works Bangalore";
+    document.title = "EOT Crane Products | 5T to 50T | Aadity Fabrication Works Bangalore";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", "EOT crane manufacturing in Bangalore — single and double girder, 5T to 50T capacity. Technical specs, load charts, and free quote.");
   }, []);

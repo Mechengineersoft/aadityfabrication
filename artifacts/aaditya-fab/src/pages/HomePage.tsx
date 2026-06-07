@@ -23,9 +23,9 @@ const SERVICES_FALLBACK = [
 
 export default function HomePage() {
   useEffect(() => {
-    document.title = "Aaditya Fabrication Works | EOT Cranes & Industrial Sheds Bangalore";
+    document.title = "Aadity Fabrication Works | EOT Cranes & Industrial Sheds Bangalore";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Aaditya Fabrication Works — 12 years of EOT crane manufacturing, industrial shed fabrication, and gantry crane services in Kallubalu, Bangalore.");
+    if (meta) meta.setAttribute("content", "Aadity Fabrication Works — 12 years of EOT crane manufacturing, industrial shed fabrication, and gantry crane services in Kallubalu, Bangalore.");
   }, []);
 
   const { data: services } = useListServices();
@@ -45,7 +45,7 @@ export default function HomePage() {
               12 Years in Business — Established 2012
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-              Aaditya Fabrication Works
+              Aadity Fabrication Works
             </h1>
             <p className="text-xl md:text-2xl text-white/80 font-medium mb-2">
               EOT Cranes &bull; Industrial Sheds &bull; Gantry Cranes &bull; Fabrication

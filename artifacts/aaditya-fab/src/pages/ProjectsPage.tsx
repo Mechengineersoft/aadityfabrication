@@ -12,7 +12,7 @@ export default function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
 
   useEffect(() => {
-    document.title = "Project Gallery | EOT Crane & Shed Projects Bangalore | Aaditya Fabrication Works";
+    document.title = "Project Gallery | EOT Crane & Shed Projects Bangalore | Aadity Fabrication Works";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", "Portfolio of completed EOT crane installations, industrial shed fabrications, gantry crane projects, and rework jobs in Bangalore.");
   }, []);

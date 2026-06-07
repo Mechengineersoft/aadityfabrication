@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 font-bold text-lg mb-3">
               <Wrench className="w-5 h-5 text-accent" />
-              <span>Aaditya <span className="text-accent">Fabrication</span></span>
+              <span>Aadity <span className="text-accent">Fabrication</span></span>
             </div>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               12 years of precision engineering in Bangalore. EOT cranes, industrial sheds, and heavy fabrication.
@@ -74,7 +74,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-primary-foreground/50">
-          <p>© {new Date().getFullYear()} Aaditya Fabrication Works. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Aadity Fabrication Works. All rights reserved.</p>
           <p>Kallubalu, Bangalore — Est. 2012</p>
         </div>
       </div>

@@ -21,9 +21,9 @@ const stats = [
 
 export default function AboutPage() {
   useEffect(() => {
-    document.title = "About Us | Aaditya Fabrication Works | 12 Years in Bangalore";
+    document.title = "About Us | Aadity Fabrication Works | 12 Years in Bangalore";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Aaditya Fabrication Works — 12 years of industrial fabrication expertise in Kallubalu, Bangalore. EOT cranes, industrial sheds, gantry cranes.");
+    if (meta) meta.setAttribute("content", "Aadity Fabrication Works — 12 years of industrial fabrication expertise in Kallubalu, Bangalore. EOT cranes, industrial sheds, gantry cranes.");
   }, []);
 
   return (
@@ -60,7 +60,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-4">Our Story</h2>
               <div className="prose prose-sm text-muted-foreground space-y-4">
                 <p>
-                  Founded in 2012, Aaditya Fabrication Works has spent over a decade serving Bangalore's industrial sector from our manufacturing facility beside Nandana Layout, Kallubalu. What started as a general fabrication shop has grown into a full-service crane and shed fabrication company trusted by factories, warehouses, and construction companies across Karnataka.
+                  Founded in 2012, Aadity Fabrication Works has spent over a decade serving Bangalore's industrial sector from our manufacturing facility beside Nandana Layout, Kallubalu. What started as a general fabrication shop has grown into a full-service crane and shed fabrication company trusted by factories, warehouses, and construction companies across Karnataka.
                 </p>
                 <p>
                   Our facility is equipped for the full lifecycle of industrial crane manufacturing — from structural steel cutting and forming to electrical panel assembly, painting, and site commissioning. We manufacture EOT cranes from 1T to 50T capacity and install industrial sheds spanning up to 60 metres.

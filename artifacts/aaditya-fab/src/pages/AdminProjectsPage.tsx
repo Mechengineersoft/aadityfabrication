@@ -112,7 +112,7 @@ export default function AdminProjectsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
-    document.title = "Manage Projects | Admin | Aaditya Fabrication Works";
+    document.title = "Manage Projects | Admin | Aadity Fabrication Works";
   }, []);
 
   const { data: session, isLoading: sessionLoading } = useGetAdminSession({ query: { queryKey: getGetAdminSessionQueryKey(), retry: false } });

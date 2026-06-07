@@ -47,7 +47,7 @@ const SERVICES_DETAIL = [
 
 export default function ServicesPage() {
   useEffect(() => {
-    document.title = "Services | EOT Cranes & Shed Fabrication Bangalore | Aaditya Fabrication Works";
+    document.title = "Services | EOT Cranes & Shed Fabrication Bangalore | Aadity Fabrication Works";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", "EOT crane manufacturing, industrial shed construction, shed rework, crane rework, gantry cranes, and general fabrication in Bangalore.");
   }, []);

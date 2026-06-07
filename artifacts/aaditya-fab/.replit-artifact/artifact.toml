@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "Aaditya Fabrication Works"
+title = "Aadity Fabrication Works"
 version = "1.0.0"
 id = "artifacts/aaditya-fab"
 router = "path"

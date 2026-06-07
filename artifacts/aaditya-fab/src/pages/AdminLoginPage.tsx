@@ -114,7 +114,7 @@ export default function AdminLoginPage() {
             </Button>
           </form>
           <p className="text-center text-xs text-muted-foreground mt-4">
-            Default: admin@aadityafabrication.com
+            Default: admin@aadityfabrication.com
           </p>
         </CardContent>
       </Card>

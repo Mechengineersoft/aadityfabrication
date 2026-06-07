@@ -13,6 +13,6 @@ router.use("/inquiries", inquiriesRouter);
 router.use("/projects", projectsRouter);
 router.use("/services", servicesRouter);
 router.use("/admin", adminRouter);
-router.use("/storage", storageRouter);
+router.use(storageRouter);
 
 export default router;

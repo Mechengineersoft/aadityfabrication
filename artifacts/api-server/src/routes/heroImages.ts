@@ -15,7 +15,7 @@ function parseHeroImageBody(body: unknown): { url: string; displayOrder: number;
   };
 }
 
-// GET /api/hero-images — public
+// GET /api/hero-images — public, active only
 router.get("/", async (req, res) => {
   try {
     const images = await db
@@ -32,10 +32,6 @@ router.get("/", async (req, res) => {
 
 // GET /api/hero-images/all — admin: all including inactive
 router.get("/all", async (req, res) => {
-  if (!req.session?.adminId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
   try {
     const images = await db
       .select()
@@ -48,12 +44,8 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// POST /api/hero-images — admin
+// POST /api/hero-images
 router.post("/", async (req, res) => {
-  if (!req.session?.adminId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
   const parsed = parseHeroImageBody(req.body);
   if (!parsed) {
     res.status(400).json({ error: "Invalid data" });
@@ -68,12 +60,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PATCH /api/hero-images/:id — admin
+// PATCH /api/hero-images/:id
 router.patch("/:id", async (req, res) => {
-  if (!req.session?.adminId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
   const id = Number(req.params.id);
   if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
   const body = req.body as Record<string, unknown>;
@@ -96,12 +84,8 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/hero-images/:id — admin
+// DELETE /api/hero-images/:id
 router.delete("/:id", async (req, res) => {
-  if (!req.session?.adminId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
   const id = Number(req.params.id);
   if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
   try {

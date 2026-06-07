@@ -101,30 +101,43 @@ export default function AdminHeroImagesPage() {
   const { data: imagesRaw, isLoading } = useHeroImages();
   const images = Array.isArray(imagesRaw) ? imagesRaw : [];
 
+  const invalidateAll = () => {
+    queryClient.invalidateQueries({ queryKey: ["hero-images-all"] });
+    queryClient.invalidateQueries({ queryKey: ["hero-images"] });
+  };
+
   const addImage = useMutation({
-    mutationFn: (url: string) =>
-      customFetch("/api/hero-images", {
+    mutationFn: async (url: string) => {
+      const r = await customFetch("/api/hero-images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, displayOrder: (images?.length ?? 0), active: true }),
-      }).then((r) => r.json()),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["hero-images-all"] }),
+        body: JSON.stringify({ url, displayOrder: images.length, active: true }),
+      });
+      if (!r.ok) throw new Error(`Failed to save image (${r.status})`);
+      return r.json();
+    },
+    onSuccess: invalidateAll,
   });
 
   const updateImage = useMutation({
-    mutationFn: ({ id, ...data }: Partial<HeroImage> & { id: number }) =>
-      customFetch(`/api/hero-images/${id}`, {
+    mutationFn: async ({ id, ...data }: Partial<HeroImage> & { id: number }) => {
+      const r = await customFetch(`/api/hero-images/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      }).then((r) => r.json()),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["hero-images-all"] }),
+      });
+      if (!r.ok) throw new Error(`Failed to update image (${r.status})`);
+      return r.json();
+    },
+    onSuccess: invalidateAll,
   });
 
   const deleteImage = useMutation({
-    mutationFn: (id: number) =>
-      customFetch(`/api/hero-images/${id}`, { method: "DELETE" }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["hero-images-all"] }),
+    mutationFn: async (id: number) => {
+      const r = await customFetch(`/api/hero-images/${id}`, { method: "DELETE" });
+      if (!r.ok) throw new Error(`Failed to delete image (${r.status})`);
+    },
+    onSuccess: invalidateAll,
   });
 
   const move = (img: HeroImage, dir: -1 | 1) => {

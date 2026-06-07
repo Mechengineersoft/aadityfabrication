@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Wrench, Building2, Settings, ChevronRight, Phone, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import TrustBadges from "@/components/TrustBadges";
 import { useListServices } from "@workspace/api-client-react";
+import { useQuery } from "@tanstack/react-query";
 
 const serviceIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   crane: Wrench,
@@ -21,6 +22,53 @@ const SERVICES_FALLBACK = [
   { id: 6, name: "General Fabrication", slug: "general-fabrication", shortDescription: "Custom metalwork, structural steel, and bespoke industrial fabrication.", icon: "fabrication" },
 ];
 
+interface HeroImage { id: number; url: string; displayOrder: number; active: boolean; }
+
+function HeroSlideshow({ images }: { images: HeroImage[] }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrent((c) => (c + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [images.length]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {images.map((img, idx) => (
+        <div
+          key={img.id}
+          className="absolute inset-0 transition-opacity duration-1000"
+          style={{ opacity: idx === current ? 1 : 0 }}
+        >
+          <img
+            src={img.url}
+            alt=""
+            className="w-full h-full object-cover"
+            loading={idx === 0 ? "eager" : "lazy"}
+          />
+          {/* Dark overlay so text stays readable */}
+          <div className="absolute inset-0 bg-black/55" />
+        </div>
+      ))}
+      {/* Dot indicators */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`w-2 h-2 rounded-full transition-all ${idx === current ? "bg-white scale-125" : "bg-white/40"}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HomePage() {
   useEffect(() => {
     document.title = "Aadity Fabrication Works | EOT Cranes & Industrial Sheds Bangalore";
@@ -31,14 +79,30 @@ export default function HomePage() {
   const { data: services } = useListServices();
   const displayServices = (services && services.length > 0) ? services : SERVICES_FALLBACK;
 
+  const { data: heroImages } = useQuery<HeroImage[]>({
+    queryKey: ["hero-images"],
+    queryFn: () => fetch("/api/hero-images").then((r) => r.json()),
+    staleTime: 60_000,
+  });
+
+  const hasImages = heroImages && heroImages.length > 0;
+
   return (
     <div>
       {/* Hero */}
-      <section className="relative steel-gradient text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,.1) 40px, rgba(255,255,255,.1) 41px)" }} />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <section className="relative text-white overflow-hidden">
+        {/* Background: slideshow when images exist, default gradient otherwise */}
+        {hasImages ? (
+          <HeroSlideshow images={heroImages} />
+        ) : (
+          <div className="absolute inset-0 steel-gradient">
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,.1) 40px, rgba(255,255,255,.1) 41px)" }} />
+            </div>
+          </div>
+        )}
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 z-10">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-accent/20 text-accent px-3 py-1.5 rounded-full text-sm font-medium mb-6">
               <Shield className="w-4 h-4" />
@@ -67,7 +131,8 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="relative bg-primary/50 py-4 border-t border-white/10">
+
+        <div className="relative bg-black/40 py-4 border-t border-white/10 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-6 text-sm text-white/70">
             <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-accent" /> Beside Nandana Layout, Kallubalu, Bangalore</span>
             <span className="flex items-center gap-1.5"><Phone className="w-4 h-4 text-accent" /> +91-9019-565420</span>

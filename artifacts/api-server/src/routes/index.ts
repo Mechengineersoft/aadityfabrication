@@ -5,6 +5,7 @@ import projectsRouter from "./projects";
 import servicesRouter from "./services";
 import adminRouter from "./admin";
 import storageRouter from "./storage";
+import heroImagesRouter from "./heroImages";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use("/projects", projectsRouter);
 router.use("/services", servicesRouter);
 router.use("/admin", adminRouter);
 router.use(storageRouter);
+router.use("/hero-images", heroImagesRouter);
 
 export default router;

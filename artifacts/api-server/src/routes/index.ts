@@ -6,6 +6,7 @@ import servicesRouter from "./services";
 import adminRouter from "./admin";
 import storageRouter from "./storage";
 import heroImagesRouter from "./heroImages";
+import productsRouter from "./products";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use("/services", servicesRouter);
 router.use("/admin", adminRouter);
 router.use(storageRouter);
 router.use("/hero-images", heroImagesRouter);
+router.use("/products", productsRouter);
 
 export default router;

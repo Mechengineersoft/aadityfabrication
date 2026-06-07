@@ -165,6 +165,9 @@ export default function AdminServicesPage() {
           <Link href="/admin/hero-images">
             <button className="text-xs text-white/70 hover:text-accent transition-colors">Hero Images</button>
           </Link>
+          <Link href="/admin/products">
+            <button className="text-xs text-white/70 hover:text-accent transition-colors">Products</button>
+          </Link>
           <span className="font-bold text-sm">Manage Services</span>
         </div>
         <Button size="sm" variant="ghost" onClick={handleLogout} className="text-white/70 hover:text-white h-7 text-xs">

@@ -196,6 +196,9 @@ export default function AdminProjectsPage() {
           <Link href="/admin/services">
             <button className="text-xs text-white/70 hover:text-accent transition-colors">Services</button>
           </Link>
+          <Link href="/admin/products">
+            <button className="text-xs text-white/70 hover:text-accent transition-colors">Products</button>
+          </Link>
           <span className="font-bold text-sm">Manage Projects</span>
         </div>
         <Button size="sm" variant="ghost" onClick={() => logout.mutate(undefined, { onSuccess: () => { queryClient.clear(); setLocation("/admin"); } })} className="text-white/70 hover:text-white h-7 text-xs">

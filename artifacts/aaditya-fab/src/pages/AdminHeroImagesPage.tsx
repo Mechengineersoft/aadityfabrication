@@ -176,6 +176,11 @@ export default function AdminHeroImagesPage() {
               <LayoutDashboard className="w-3.5 h-3.5" /> Services
             </Button>
           </Link>
+          <Link href="/admin/products">
+            <Button variant="ghost" size="sm" className="gap-1.5 text-xs">
+              <LayoutDashboard className="w-3.5 h-3.5" /> Products
+            </Button>
+          </Link>
           <Button
             size="sm"
             variant="ghost"

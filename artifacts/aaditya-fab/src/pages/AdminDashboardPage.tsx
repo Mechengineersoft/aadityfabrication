@@ -134,6 +134,11 @@ export default function AdminDashboardPage() {
               Services
             </button>
           </Link>
+          <Link href="/admin/products">
+            <button className="text-xs text-white/70 hover:text-accent transition-colors">
+              Products
+            </button>
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-white/60">{session?.email}</span>

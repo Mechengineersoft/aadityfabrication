@@ -171,6 +171,11 @@ export default function AdminHeroImagesPage() {
               <FolderOpen className="w-3.5 h-3.5" /> Projects
             </Button>
           </Link>
+          <Link href="/admin/services">
+            <Button variant="ghost" size="sm" className="gap-1.5 text-xs">
+              <LayoutDashboard className="w-3.5 h-3.5" /> Services
+            </Button>
+          </Link>
           <Button
             size="sm"
             variant="ghost"

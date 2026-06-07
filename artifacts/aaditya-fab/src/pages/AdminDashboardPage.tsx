@@ -129,6 +129,11 @@ export default function AdminDashboardPage() {
               Hero Images
             </button>
           </Link>
+          <Link href="/admin/services">
+            <button className="text-xs text-white/70 hover:text-accent transition-colors">
+              Services
+            </button>
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-white/60">{session?.email}</span>

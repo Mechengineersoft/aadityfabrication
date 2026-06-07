@@ -63,4 +63,17 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// DELETE /api/services/:id
+router.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
+  try {
+    await db.delete(servicesTable).where(eq(servicesTable.id, id));
+    res.status(204).send();
+  } catch (err) {
+    req.log.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;

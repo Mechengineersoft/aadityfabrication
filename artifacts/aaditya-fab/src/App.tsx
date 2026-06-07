@@ -14,6 +14,7 @@ import AdminLoginPage from "@/pages/AdminLoginPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import AdminProjectsPage from "@/pages/AdminProjectsPage";
 import AdminHeroImagesPage from "@/pages/AdminHeroImagesPage";
+import AdminServicesPage from "@/pages/AdminServicesPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -22,7 +23,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const ADMIN_ROUTES = ["/admin", "/admin/dashboard", "/admin/projects", "/admin/hero-images"];
+const ADMIN_ROUTES = ["/admin", "/admin/dashboard", "/admin/projects", "/admin/hero-images", "/admin/services"];
 
 function isAdminRoute(path: string) {
   return ADMIN_ROUTES.some((r) => path === r || path.startsWith(r + "/"));
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/admin/dashboard" component={AdminDashboardPage} />
       <Route path="/admin/projects" component={AdminProjectsPage} />
       <Route path="/admin/hero-images" component={AdminHeroImagesPage} />
+      <Route path="/admin/services" component={AdminServicesPage} />
       <Route component={NotFound} />
     </Switch>
   );

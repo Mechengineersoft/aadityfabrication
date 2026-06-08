@@ -1,7 +1,7 @@
-Build me a complete, production-ready website for "Aaditya Fabrication Works" - a legitimate industrial fabrication company in Bangalore with 12 years of business.
+Build me a complete, production-ready website for "Aadity Fabrication Works" - a legitimate industrial fabrication company in Bangalore with 12 years of business.
 
 ## EXACT BUSINESS DETAILS (From Justdial):
-- Business Name: Aaditya Fabrication Works
+- Business Name: Aadity Fabrication Works
 - Business Type: Fabricators & Shed Fabricators (Manufacturer)
 - Location: Beside Nandana Layout, Kallubalu, Bangalore
 - Years in Business: 12 Years
@@ -30,7 +30,7 @@ Build me a complete, production-ready website for "Aaditya Fabrication Works" - 
 **Required Pages:**
 
 1. **Homepage**
-   - Hero section: "Aaditya Fabrication Works - 12 Years of Excellence in Bangalore"
+   - Hero section: "Aadity Fabrication Works - 12 Years of Excellence in Bangalore"
    - Subtitle: "EOT Cranes | Industrial Sheds | Gantry Rework | Fabrication"
    - Trust badge: "12 Years in Business" prominently displayed
    - Location: "Kallubalu, Bangalore"

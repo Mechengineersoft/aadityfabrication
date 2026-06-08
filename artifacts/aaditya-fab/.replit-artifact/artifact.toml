@@ -15,10 +15,10 @@ paths = [ "/" ]
 localPort = 23632
 
 [services.development]
-run = "pnpm --filter @workspace/aadity-fab run dev"
+run = "pnpm --filter @workspace/aaditya-fab run dev"
 
 [services.production]
-build = [ "pnpm", "--filter", "@workspace/aadity-fab", "run", "build" ]
+build = [ "pnpm", "--filter", "@workspace/aaditya-fab", "run", "build" ]
 publicDir = "artifacts/aaditya-fab/dist/public"
 serve = "static"
 

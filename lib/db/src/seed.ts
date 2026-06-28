@@ -35,8 +35,3 @@ export async function seedAdmin() {
     console.error("Error seeding database:", err);
   }
 }
-
-// If run directly as a script
-if (import.meta.url === `file://${process.argv[1]}`) {
-  seedAdmin().then(() => process.exit(0));
-}

@@ -18,7 +18,7 @@ services:
       
       # Seed the default admin
       cd lib/db
-      node --import tsx/esm ./src/seed.ts
+      node --import tsx/esm ./src/run-seed.ts
     startCommand: |
       cd artifacts/api-server
       pnpm start

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: aadity-website-builder
+    name: aadityfabrication
     env: node
     plan: free
     buildCommand: |

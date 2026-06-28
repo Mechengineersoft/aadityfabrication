@@ -3,6 +3,7 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import path from "path";
 import router from "./routes";
 import { logger } from "./lib/logger";
 import { pool } from "@workspace/db";
@@ -43,14 +44,24 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000, // 24h
     },
   }),
 );
 
 app.use("/api", router);
+
+// Serve static files from the frontend build
+const staticPath = path.resolve(import.meta.dirname, "../../aaditya-fab/dist/public");
+app.use(express.static(staticPath));
+
+// For SPA routing: serve index.html for any route that doesn't match an API or static file
+app.get("*", (req, res) => {
+  const indexPath = path.join(staticPath, "index.html");
+  res.sendFile(indexPath);
+});
 
 export default app;

@@ -15,6 +15,10 @@ services:
       pnpm --filter @workspace/aaditya-fab run build
       pnpm --filter @workspace/api-server run build
       pnpm --filter @workspace/db push
+      
+      # Seed the default admin
+      cd lib/db
+      node --import tsx/esm ./src/seed.ts
     startCommand: |
       cd artifacts/api-server
       pnpm start

@@ -16,11 +16,13 @@
     "drizzle-orm": "catalog:",
     "drizzle-zod": "^0.8.3",
     "pg": "^8.20.0",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "bcryptjs": "^3.0.3"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/pg": "^8.20.0",
+    "@types/bcryptjs": "^3.0.0",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.21.0"
   }

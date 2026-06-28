@@ -59,7 +59,7 @@ const staticPath = path.resolve(import.meta.dirname, "../../aaditya-fab/dist/pub
 app.use(express.static(staticPath));
 
 // For SPA routing: serve index.html for any route that doesn't match an API or static file
-app.get("*", (req, res) => {
+app.get("(.*)", (req, res) => {
   const indexPath = path.join(staticPath, "index.html");
   res.sendFile(indexPath);
 });

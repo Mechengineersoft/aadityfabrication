@@ -1,5 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
+import { seedAdmin } from "@workspace/db/src/seed.js";
 
 const rawPort = process.env["PORT"];
 
@@ -15,11 +16,18 @@ if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
 
-app.listen(port, (err) => {
-  if (err) {
-    logger.error({ err }, "Error listening on port");
-    process.exit(1);
-  }
+async function startServer() {
+  // Seed admin user on startup
+  await seedAdmin();
 
-  logger.info({ port }, "Server listening");
-});
+  app.listen(port, (err) => {
+    if (err) {
+      logger.error({ err }, "Error listening on port");
+      process.exit(1);
+    }
+
+    logger.info({ port }, "Server listening");
+  });
+}
+
+startServer();

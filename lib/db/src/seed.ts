@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 const DEFAULT_ADMIN_EMAIL = "admin@aadityfabrication.com";
 const DEFAULT_ADMIN_PASSWORD = "Admin123!";
 
-async function seed() {
+export async function seedAdmin() {
   try {
     // Check if admin already exists
     const [existingAdmin] = await db
@@ -16,7 +16,7 @@ async function seed() {
 
     if (existingAdmin) {
       console.log("Default admin already exists!");
-      process.exit(0);
+      return;
     }
 
     // Hash the password
@@ -31,11 +31,12 @@ async function seed() {
     console.log("Successfully created default admin!");
     console.log(`Email: ${DEFAULT_ADMIN_EMAIL}`);
     console.log(`Password: ${DEFAULT_ADMIN_PASSWORD}`);
-    process.exit(0);
   } catch (err) {
     console.error("Error seeding database:", err);
-    process.exit(1);
   }
 }
 
-seed();
+// If run directly as a script
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedAdmin().then(() => process.exit(0));
+}

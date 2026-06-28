@@ -4,10 +4,11 @@ services:
     env: node
     plan: free
     buildCommand: |
-      npm install -g pnpm
+      npm install -g pnpm@latest
       pnpm install
       pnpm --filter @workspace/aaditya-fab run build
       pnpm --filter @workspace/api-server run build
+      pnpm --filter @workspace/db push
     startCommand: |
       cd artifacts/api-server
       pnpm start

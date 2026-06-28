@@ -1,6 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
-import { seedAdmin } from "@workspace/db/src/seed.js";
+import { seedAdmin } from "@workspace/db/seed.js";
 
 const rawPort = process.env["PORT"];
 

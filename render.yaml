@@ -35,6 +35,12 @@ services:
           property: connectionString
       - key: SESSION_SECRET
         generateValue: true
+      - key: GMAIL_APP_PASSWORD
+        value: "poex roor xtyg kmjh"
+      - key: WHATSAPP_ACCESS_TOKEN
+        value: "EAATMsTIyn8kBRsGeIXHxCjkLetZA9wf3HGgE1wOfmqlfOcGUkxYnFtQdDzGr4eZAe6mC5KDVpyvez7u7rttFCmZC0uZBY0Dy49ilZC8Qisg5Nbt0pXuGv6dcoo1JZBr2gYIvdk5WPo7T9OVeW0N8bDOXwr31Oi3liVH1ZCc4sDWRS49EqXxSMw1CtKzQ8lTXSQXecw1lf917CQuLvaWQidj06Fk0HZBqFmKuJUkJNUu9TAIOOnQZBUjsnXhcLBc58XZAW4RjPmPODVPEP5T5EXoHiQ"
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        value: "1223333757520311"
     healthCheckPath: /api/health
 
 databases:

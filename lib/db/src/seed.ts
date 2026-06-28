@@ -1,5 +1,6 @@
 
 import { db, adminsTable } from "./index.js";
+import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 const DEFAULT_ADMIN_EMAIL = "admin@aadityfabrication.com";
@@ -11,7 +12,7 @@ async function seed() {
     const [existingAdmin] = await db
       .select()
       .from(adminsTable)
-      .where(adminsTable.email.eq(DEFAULT_ADMIN_EMAIL));
+      .where(eq(adminsTable.email, DEFAULT_ADMIN_EMAIL));
 
     if (existingAdmin) {
       console.log("Default admin already exists!");

@@ -76,13 +76,22 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
   }
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // use TLS on port 587 starts with STARTTLS
     auth: {
       user: OWNER_EMAIL,
       pass: appPassword,
     },
-    // Force IPv4 to prevent ENETUNREACH error
+    // Force IPv4
     family: 4,
+    tls: {
+      rejectUnauthorized: false, // Allow self-signed certs (not strictly required sometimes needed sometimes not)
+      minVersion: "TLSv1.2",
+    },
+    connectionTimeout: 20000, // 20 secs
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
   });
 
   await transporter.sendMail({

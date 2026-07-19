@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { MapPin, Clock, Phone, Wrench } from "lucide-react";
+import { MapPin, Clock, Phone, Wrench, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -64,6 +64,10 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
                 <span>+91-9019-565420</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-accent shrink-0" />
+                <span>aadityfabricationworks@gmail.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-accent shrink-0" />

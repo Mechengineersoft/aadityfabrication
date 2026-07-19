@@ -175,7 +175,7 @@ export default function ContactPage() {
                 {
                   Icon: Mail,
                   label: "Email",
-                  value: "aadityfabricationworks@.com",
+                  value: "aadityfabricationworks@gmail.com",
                 },
                 {
                   Icon: Clock,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Wrench, Building2, Settings, ChevronRight, Phone, MapPin, Clock } from "lucide-react";
+import { ArrowRight, Wrench, Building2, Settings, ChevronRight, Phone, MapPin, Clock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import TrustBadges from "@/components/TrustBadges";
@@ -136,6 +136,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-6 text-sm text-white/70">
             <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-accent" /> Beside Nandana Layout, Kallubalu, Bangalore</span>
             <span className="flex items-center gap-1.5"><Phone className="w-4 h-4 text-accent" /> +91-9019-565420</span>
+            <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-accent" /> aadityfabricationworks@gmail.com</span>
             <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-accent" /> Open until 6:00 pm</span>
           </div>
         </div>

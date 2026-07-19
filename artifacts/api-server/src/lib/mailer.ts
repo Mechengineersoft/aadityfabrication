@@ -81,6 +81,8 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
       user: OWNER_EMAIL,
       pass: appPassword,
     },
+    // Force IPv4 to prevent ENETUNREACH error
+    family: 4,
   });
 
   await transporter.sendMail({

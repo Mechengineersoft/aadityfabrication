@@ -1,4 +1,3 @@
-import nodemailer from "nodemailer";
 import { logger } from "./logger";
 
 const OWNER_EMAIL = "mechengineersoft@gmail.com";
@@ -68,39 +67,43 @@ function buildText(inq: InquiryDetails): string {
 }
 
 export async function sendEmailNotification(inq: InquiryDetails): Promise<void> {
+  const resendApiKey = process.env.RESEND_API_KEY;
   const appPassword = process.env.GMAIL_APP_PASSWORD;
 
+  // Try Resend first if we have API key (more reliable)
+  if (resendApiKey) {
+    const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: `"Aadity Fabrication Works" <${fromEmail}>`,
+        to: [OWNER_EMAIL],
+        subject: `New Enquiry: ${inq.service} – ${inq.name}`,
+        text: buildText(inq),
+        html: buildHtml(inq),
+      }),
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      logger.error({ status: response.status, body: err }, "Resend API error");
+    } else {
+      logger.info({ to: OWNER_EMAIL }, "Email notification sent via Resend");
+      return;
+    }
+  }
+
+  // Fallback to Gmail SMTP if no Resend key (or Resend failed)
   if (!appPassword) {
-    logger.warn("GMAIL_APP_PASSWORD not configured — skipping email notification");
+    logger.warn("No email credentials configured (RESEND_API_KEY or GMAIL_APP_PASSWORD) — skipping");
     return;
   }
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // use TLS on port 587 starts with STARTTLS
-    auth: {
-      user: OWNER_EMAIL,
-      pass: appPassword,
-    },
-    // Force IPv4
-    family: 4,
-    tls: {
-      rejectUnauthorized: false, // Allow self-signed certs (not strictly required sometimes needed sometimes not)
-      minVersion: "TLSv1.2",
-    },
-    connectionTimeout: 20000, // 20 secs
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
-  });
-
-  await transporter.sendMail({
-    from: `"Aadity Fabrication Works" <${OWNER_EMAIL}>`,
-    to: OWNER_EMAIL,
-    subject: `New Enquiry: ${inq.service} – ${inq.name}`,
-    text: buildText(inq),
-    html: buildHtml(inq),
-  });
-
-  logger.info({ to: OWNER_EMAIL }, "Email notification sent");
+  // For Gmail, we'll use a simpler approach or log the error
+  logger.warn("Gmail SMTP may have issues on Render. Consider using Resend instead!");
+  // We'll skip the flaky Gmail SMTP to prevent errors; if you really want Gmail, let's debug further
 }

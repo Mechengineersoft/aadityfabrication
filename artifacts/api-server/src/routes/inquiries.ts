@@ -11,6 +11,7 @@ import {
 } from "@workspace/api-zod";
 import { sendWhatsAppNotification } from "../lib/whatsapp";
 import { sendEmailNotification } from "../lib/mailer";
+import { sendTelegramNotification } from "../lib/telegram";
 
 const router = Router();
 
@@ -106,6 +107,9 @@ router.post("/", async (req, res) => {
     );
     sendEmailNotification(parsed.data).catch((err) =>
       req.log.error(err, "Email notification failed"),
+    );
+    sendTelegramNotification(parsed.data).catch((err) =>
+      req.log.error(err, "Telegram notification failed"),
     );
 
     res.status(201).json(inquiry);

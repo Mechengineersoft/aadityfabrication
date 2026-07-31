@@ -15,7 +15,7 @@ const milestones = [
 const stats = [
   { value: "12+", label: "Years in Business" },
   { value: "200+", label: "Projects Completed" },
-  { value: "50T", label: "Max Crane Capacity" },
+  { value: "80T", label: "Max Crane Capacity" },
   { value: "24h", label: "Quote Turnaround" },
 ];
 

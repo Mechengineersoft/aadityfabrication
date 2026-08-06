@@ -22,6 +22,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight">
+             <img src="/logo.jpeg" alt="Aadity Fabrication Works" className="h-9 w-auto object-contain" />
             <Wrench className="w-6 h-6 text-accent" />
             <span>Aadity <span className="text-accent">Fabrication</span></span>
           </Link>

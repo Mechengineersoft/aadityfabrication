@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { Filter, ArrowRight, PlusCircle } from "lucide-react";
+import { Filter, ArrowRight, PlusCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,6 +10,11 @@ const CATEGORIES = ["All", "EOT", "Shed", "Gantry", "Rework", "Fabrication"];
 
 export default function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Record<number, boolean>>({});
+
+  function toggleDescription(id: number) {
+    setExpandedDescriptions((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
 
   useEffect(() => {
     document.title = "Project Gallery | EOT Crane & Shed Projects Bangalore | Aadity Fabrication Works";
@@ -97,7 +102,28 @@ export default function ProjectsPage() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-base mb-1">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{p.description}</p>
+                    {p.description && (
+                      <div className="mb-3">
+                        <p
+                          className={`text-sm text-muted-foreground ${expandedDescriptions[p.id] ? "" : "line-clamp-2"}`}
+                        >
+                          {p.description}
+                        </p>
+                        {p.description.length > 80 && (
+                          <button
+                            onClick={() => toggleDescription(p.id)}
+                            className="flex items-center gap-0.5 text-xs text-accent font-medium mt-1 hover:underline"
+                          >
+                            {expandedDescriptions[p.id] ? (
+                              <><ChevronUp className="w-3 h-3" /> Show less</>
+                            ) : (
+                              <><ChevronDown className="w-3 h-3" /> Read more</>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    {!p.description && <div className="mb-3" />}
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span>{p.location ?? "Bangalore"}</span>
                       {p.year && <span>{p.year}</span>}

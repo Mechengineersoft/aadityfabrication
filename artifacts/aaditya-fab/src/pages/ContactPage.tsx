@@ -426,6 +426,38 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+      
+      {/* Google Map — exact location pinned via coordinates */}
+      <section className="bg-muted/40 border-t border-border py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-accent" /> Find Us on the Map
+          </h2>
+          <div className="rounded-xl overflow-hidden border border-border shadow-sm" style={{ height: "400px" }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.5!2d77.6183655!3d12.7723305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6900254714b1%3A0x56489b526e0bdcdc!2sAadity%20Fabrication%20Works!5e0!3m2!1sen!2sin!4v1722900000000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Aadity Fabrication Works — QJC9+W9M, 13th Cross Rd, Nandanavana Layout, Kalbalu, Karnataka 560105"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground mt-2 text-center">
+            QJC9+W9M, 13th Cross Rd, Nandanavana Layout, Kalbalu, Karnataka 560105 &nbsp;·&nbsp;
+            <a
+              href="https://maps.app.goo.gl/166Bn4zaKqASQ7fo9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline"
+            >
+              Open in Google Maps ↗
+            </a>
+          </p>
+        </div>
+      </section>      
     </div>
   );
 }

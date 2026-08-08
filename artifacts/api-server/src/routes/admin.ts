@@ -140,12 +140,25 @@ router.post("/request-otp", async (req, res) => {
   const otp = generateOtp();
   otpStore.set(email, { otp, expiresAt: Date.now() + 10 * 60 * 1000 });
 
+  req.log.info({ email, otp }, ">>>> OTP generated, about to send via all channels");
+
   // Send to all configured channels concurrently (best-effort)
-  await Promise.all([
-    sendAdminOtpEmail(email, otp),
-    sendOtpViaWhatsApp(otp),
-    sendOtpViaTelegram(otp),
-  ]);
+  try {
+    req.log.info("Calling sendAdminOtpEmail...");
+    const emailPromise = sendAdminOtpEmail(email, otp).then(() => req.log.info("sendAdminOtpEmail resolved"))
+      .catch(err => req.log.error({ err }, "sendAdminOtpEmail THROWN EXCEPTION"));
+    req.log.info("Calling WhatsApp...");
+    const whatsappPromise = sendOtpViaWhatsApp(otp).then(() => req.log.info("WhatsApp resolved"))
+      .catch(err => req.log.error({ err }, "WhatsApp THROWN EXCEPTION"));
+    req.log.info("Calling Telegram...");
+    const telegramPromise = sendOtpViaTelegram(otp).then(() => req.log.info("Telegram resolved"))
+      .catch(err => req.log.error({ err }, "Telegram THROWN EXCEPTION"));
+
+    await Promise.all([emailPromise, whatsappPromise, telegramPromise]);
+    req.log.info("All 3 channel send promises completed");
+  } catch (err) {
+    req.log.error({ err }, "Promise.all THROWN EXCEPTION in OTP send");
+  }
 
   req.log.info({ email }, "OTP requested");
   res.json({ sent: true, message: "OTP sent via Email, WhatsApp, and Telegram" });

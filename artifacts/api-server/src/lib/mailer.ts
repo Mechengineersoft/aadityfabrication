@@ -110,8 +110,19 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
 
 // ─── Admin OTP Email (uses SAME logic as inquiry emails!) ────────────────────
 export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<void> {
+  logger.info("==================== [OTP EMAIL START] ====================");
+  logger.info({ toEmail, otp }, "1. sendAdminOtpEmail called");
+
   const resendApiKey = process.env.RESEND_API_KEY;
   const appPassword = process.env.GMAIL_APP_PASSWORD;
+
+  logger.info({
+    hasResendKey: !!resendApiKey,
+    resendKeyLength: resendApiKey ? resendApiKey.length : 0,
+    resendKeyPrefix: resendApiKey ? `${resendApiKey.slice(0, 5)}...` : null,
+    hasGmailAppPassword: !!appPassword,
+  }, "2. Checked environment variables");
+
   const subject = "Admin OTP – Aadity Fabrication Works";
   const text = `Admin Account: ${toEmail}\n\nYour OTP to change admin password is: ${otp}\n\nThis OTP expires in 10 minutes. Do not share it with anyone.`;
   const html = `
@@ -131,36 +142,50 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
   // ─── Resend first (EXACT same as inquiry emails) ──────────────────────────
   if (resendApiKey) {
     const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
-    const recipients = ["mechengineersoft@gmail.com", "aadityfabrication@gmail.com"];
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: `"Aadity Fabrication Works" <${fromEmail}>`,
-        to: recipients,
-        subject,
-        text,
-        html,
-      }),
-    });
+    const recipients = [OWNER_EMAIL, "aadityfabrication@gmail.com"];
+    logger.info({ fromEmail, recipients }, "3. Resend available — preparing to send");
 
-    if (!response.ok) {
-      const err = await response.text();
-      logger.error({ status: response.status, body: err }, "Resend OTP API error");
-    } else {
-      logger.info({ to: recipients.join(",") }, "OTP notification sent via Resend");
-      return;
+    const payload = JSON.stringify({
+      from: `"Aadity Fabrication Works" <${fromEmail}>`,
+      to: recipients,
+      subject,
+      text,
+      html,
+    });
+    logger.info({ payloadLength: payload.length }, "4. JSON payload prepared");
+
+    try {
+      logger.info("5. Fetching Resend API...");
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: payload,
+      });
+      logger.info({ status: response.status, statusText: response.statusText }, "6. Received response from Resend");
+
+      const responseBody = await response.text();
+      if (!response.ok) {
+        logger.error({ status: response.status, body: responseBody }, "❌ 7. Resend OTP API ERROR");
+      } else {
+        logger.info({ body: responseBody, to: recipients.join(",") }, "✅ 7. OTP notification sent via Resend SUCCESS");
+        logger.info("==================== [OTP EMAIL END - SUCCESS] ====================");
+        return;
+      }
+    } catch (fetchErr) {
+      logger.error({ err: fetchErr }, "❌ 7. EXCEPTION during Resend fetch");
     }
   }
 
   // ─── Gmail SMTP fallback (same as inquiry) ────────────────────────────────
   if (!appPassword) {
     logger.warn("No email credentials configured (RESEND_API_KEY or GMAIL_APP_PASSWORD) — skipping OTP email");
+    logger.info("==================== [OTP EMAIL END - NO CREDS] ====================");
     return;
   }
 
   logger.warn("Resend not available; Gmail SMTP may have issues on Render (consider Resend!)");
+  logger.info("==================== [OTP EMAIL END - FALLBACK SKIPPED] ====================");
 }

@@ -137,7 +137,7 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
       },
       body: JSON.stringify({
         from: `"Aadity Fabrication Works" <${fromEmail}>`,
-        to: [toEmail, "aadityfabricationworks@gmail.com"],
+        to: [toEmail, "aadityfabrication@gmail.com"],
         subject,
         text,
         html,

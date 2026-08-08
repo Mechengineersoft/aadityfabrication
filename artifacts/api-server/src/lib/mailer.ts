@@ -142,40 +142,49 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
   // ─── Resend first (EXACT same as inquiry emails) ──────────────────────────
   if (resendApiKey) {
     const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
+    // Send ONE email at a time to avoid Resend 403 error (testing tier only allows sending to your verified email!)
     const recipients = [OWNER_EMAIL, "aadityfabrication@gmail.com"];
-    logger.info({ fromEmail, recipients }, "3. Resend available — preparing to send");
+    logger.info({ fromEmail, recipients }, "3. Resend available — preparing to send one email per recipient");
+    let anySuccess = false;
 
-    const payload = JSON.stringify({
-      from: `"Aadity Fabrication Works" <${fromEmail}>`,
-      to: recipients,
-      subject,
-      text,
-      html,
-    });
-    logger.info({ payloadLength: payload.length }, "4. JSON payload prepared");
-
-    try {
-      logger.info("5. Fetching Resend API...");
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: payload,
+    for (let i = 0; i < recipients.length; i++) {
+      const to = recipients[i];
+      logger.info({ step: i + 1, to }, `4. Preparing payload for ${to}`);
+      const payload = JSON.stringify({
+        from: `"Aadity Fabrication Works" <${fromEmail}>`,
+        to: [to],
+        subject,
+        text,
+        html,
       });
-      logger.info({ status: response.status, statusText: response.statusText }, "6. Received response from Resend");
 
-      const responseBody = await response.text();
-      if (!response.ok) {
-        logger.error({ status: response.status, body: responseBody }, "❌ 7. Resend OTP API ERROR");
-      } else {
-        logger.info({ body: responseBody, to: recipients.join(",") }, "✅ 7. OTP notification sent via Resend SUCCESS");
-        logger.info("==================== [OTP EMAIL END - SUCCESS] ====================");
-        return;
+      try {
+        logger.info({ to }, `5. Fetching Resend API for ${to}...`);
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: payload,
+        });
+        logger.info({ to, status: response.status, statusText: response.statusText }, `6. Received response for ${to}`);
+
+        const responseBody = await response.text();
+        if (!response.ok) {
+          logger.error({ to, status: response.status, body: responseBody }, `❌ 7. Resend OTP API ERROR for ${to}`);
+        } else {
+          logger.info({ to, body: responseBody }, `✅ 7. OTP SUCCESSFULLY SENT via Resend to ${to}`);
+          anySuccess = true;
+        }
+      } catch (fetchErr) {
+        logger.error({ to, err: fetchErr }, `❌ 7. EXCEPTION during Resend fetch for ${to}`);
       }
-    } catch (fetchErr) {
-      logger.error({ err: fetchErr }, "❌ 7. EXCEPTION during Resend fetch");
+    }
+
+    if (anySuccess) {
+      logger.info("==================== [OTP EMAIL END - AT LEAST ONE SUCCESS] ====================");
+      return;
     }
   }
 

@@ -107,3 +107,51 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
   logger.warn("Gmail SMTP may have issues on Render. Consider using Resend instead!");
   // We'll skip the flaky Gmail SMTP to prevent errors; if you really want Gmail, let's debug further
 }
+
+// ─── Admin OTP Email ─────────────────────────────────────────────────────────
+export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<void> {
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const subject = "Admin OTP – Aadity Fabrication Works";
+  const text = `Your OTP to change admin password is: ${otp}\n\nThis OTP expires in 10 minutes. Do not share it with anyone.`;
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto">
+      <div style="background:#2C3E50;color:#fff;padding:16px 24px;border-radius:6px 6px 0 0">
+        <h2 style="margin:0;font-size:18px">Admin OTP – Aadity Fabrication Works</h2>
+      </div>
+      <div style="padding:24px;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px">
+        <p>Your one-time password to change the admin account password:</p>
+        <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#E67E22;text-align:center;padding:16px 0">${otp}</div>
+        <p style="color:#888;font-size:12px">This OTP is valid for 10 minutes. Never share it with anyone.</p>
+      </div>
+    </div>
+  `;
+
+  // Try Resend first
+  if (resendApiKey) {
+    const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: `"Aadity Fabrication Works" <${fromEmail}>`,
+        to: [toEmail, "aadityfabricationworks@gmail.com"],
+        subject,
+        text,
+        html,
+      }),
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      logger.error({ status: response.status, body: err }, "Resend OTP API error");
+    } else {
+      logger.info({ to: toEmail }, "Admin OTP email sent via Resend");
+      return;
+    }
+  }
+
+  logger.warn("Resend not configured — OTP email skipped. Consider adding RESEND_API_KEY env variable.");
+}

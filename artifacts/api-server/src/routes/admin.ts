@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { AdminLoginBody } from "@workspace/api-zod";
 import { logger } from "../lib/logger";
+import { sendAdminOtpEmail } from "../lib/mailer";
 
 declare module "express-session" {
   interface SessionData {
@@ -19,37 +20,6 @@ const otpStore = new Map<string, { otp: string; expiresAt: number }>();
 
 function generateOtp(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-async function sendOtpViaEmail(toEmail: string, otp: string): Promise<void> {
-  try {
-    const appPassword = process.env.GMAIL_APP_PASSWORD;
-    if (!appPassword) { logger.warn("GMAIL_APP_PASSWORD not set — skipping OTP email"); return; }
-    const nodemailer = await import("nodemailer");
-    const transporter = nodemailer.default.createTransport({
-      service: "gmail",
-      auth: { user: "mechengineersoft@gmail.com", pass: appPassword },
-    });
-    await transporter.sendMail({
-      from: '"Aadity Fabrication Works" <mechengineersoft@gmail.com>',
-      to: toEmail,
-      subject: "Admin OTP – Aadity Fabrication Works",
-      text: `Your OTP to change admin password is: ${otp}\n\nThis OTP expires in 10 minutes. Do not share it with anyone.`,
-      html: `<div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto">
-        <div style="background:#2C3E50;color:#fff;padding:16px 24px;border-radius:6px 6px 0 0">
-          <h2 style="margin:0;font-size:18px">Admin OTP – Aadity Fabrication Works</h2>
-        </div>
-        <div style="padding:24px;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px">
-          <p>Your one-time password to change the admin account password:</p>
-          <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#E67E22;text-align:center;padding:16px 0">${otp}</div>
-          <p style="color:#888;font-size:12px">This OTP is valid for 10 minutes. Never share it with anyone.</p>
-        </div>
-      </div>`,
-    });
-    logger.info({ to: toEmail }, "OTP email sent");
-  } catch (err) {
-    logger.error(err, "Failed to send OTP email");
-  }
 }
 
 async function sendOtpViaWhatsApp(otp: string): Promise<void> {
@@ -172,7 +142,7 @@ router.post("/request-otp", async (req, res) => {
 
   // Send to all configured channels concurrently (best-effort)
   await Promise.all([
-    sendOtpViaEmail(email, otp),
+    sendAdminOtpEmail(email, otp),
     sendOtpViaWhatsApp(otp),
     sendOtpViaTelegram(otp),
   ]);

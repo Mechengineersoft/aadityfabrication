@@ -131,7 +131,7 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
   if (resendApiKey) {
     const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
     // Always send to YOUR verified Gmail addresses (works with Resend free tier!)
-    const recipients = ["mechengineersoft@gmail.com", "aadityfabricationworks@gmail.com"];
+    const recipients = ["mechengineersoft@gmail.com", "aadityfabrication@gmail.com"];
     logger.info({ adminEmail: toEmail, recipients }, "Attempting to send admin OTP email");
 
     const response = await fetch("https://api.resend.com/emails", {

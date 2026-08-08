@@ -108,9 +108,10 @@ export async function sendEmailNotification(inq: InquiryDetails): Promise<void> 
   // We'll skip the flaky Gmail SMTP to prevent errors; if you really want Gmail, let's debug further
 }
 
-// ─── Admin OTP Email ─────────────────────────────────────────────────────────
+// ─── Admin OTP Email (uses SAME logic as inquiry emails!) ────────────────────
 export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<void> {
   const resendApiKey = process.env.RESEND_API_KEY;
+  const appPassword = process.env.GMAIL_APP_PASSWORD;
   const subject = "Admin OTP – Aadity Fabrication Works";
   const text = `Admin Account: ${toEmail}\n\nYour OTP to change admin password is: ${otp}\n\nThis OTP expires in 10 minutes. Do not share it with anyone.`;
   const html = `
@@ -127,13 +128,10 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
     </div>
   `;
 
-  // Try Resend first
+  // ─── Resend first (EXACT same as inquiry emails) ──────────────────────────
   if (resendApiKey) {
     const fromEmail = process.env.RESEND_FROM || "onboarding@resend.dev";
-    // Always send to YOUR verified Gmail addresses (works with Resend free tier!)
     const recipients = ["mechengineersoft@gmail.com", "aadityfabrication@gmail.com"];
-    logger.info({ adminEmail: toEmail, recipients }, "Attempting to send admin OTP email");
-
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -149,14 +147,20 @@ export async function sendAdminOtpEmail(toEmail: string, otp: string): Promise<v
       }),
     });
 
-    const responseBody = await response.text();
     if (!response.ok) {
-      logger.error({ status: response.status, body: responseBody }, "❌ Resend OTP API ERROR");
+      const err = await response.text();
+      logger.error({ status: response.status, body: err }, "Resend OTP API error");
     } else {
-      logger.info({ body: responseBody }, "✅ Admin OTP email sent via Resend");
+      logger.info({ to: recipients.join(",") }, "OTP notification sent via Resend");
       return;
     }
-  } else {
-    logger.warn("⚠️ RESEND_API_KEY not set — OTP email skipped!");
   }
+
+  // ─── Gmail SMTP fallback (same as inquiry) ────────────────────────────────
+  if (!appPassword) {
+    logger.warn("No email credentials configured (RESEND_API_KEY or GMAIL_APP_PASSWORD) — skipping OTP email");
+    return;
+  }
+
+  logger.warn("Resend not available; Gmail SMTP may have issues on Render (consider Resend!)");
 }

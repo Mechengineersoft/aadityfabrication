@@ -16,6 +16,7 @@ import AdminProjectsPage from "@/pages/AdminProjectsPage";
 import AdminHeroImagesPage from "@/pages/AdminHeroImagesPage";
 import AdminServicesPage from "@/pages/AdminServicesPage";
 import AdminProductsPage from "@/pages/AdminProductsPage";
+import AdminChangePasswordPage from "@/pages/AdminChangePasswordPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -24,12 +25,11 @@ const queryClient = new QueryClient({
   },
 });
 
-const ADMIN_ROUTES = ["/admin", "/admin/dashboard", "/admin/projects", "/admin/hero-images", "/admin/services", "/admin/products"];
+const ADMIN_ROUTES = ["/admin", "/admin/dashboard", "/admin/projects", "/admin/hero-images", "/admin/services", "/admin/products", "/admin/change-password"];
 
 function isAdminRoute(path: string) {
   return ADMIN_ROUTES.some((r) => path === r || path.startsWith(r + "/"));
 }
-
 
 const WHATSAPP_NUMBER = "919019565420"; // +91-9019-565420
 
@@ -79,6 +79,7 @@ function Router() {
       <Route path="/admin/hero-images" component={AdminHeroImagesPage} />
       <Route path="/admin/services" component={AdminServicesPage} />
       <Route path="/admin/products" component={AdminProductsPage} />
+      <Route path="/admin/change-password" component={AdminChangePasswordPage} />
       <Route component={NotFound} />
     </Switch>
   );

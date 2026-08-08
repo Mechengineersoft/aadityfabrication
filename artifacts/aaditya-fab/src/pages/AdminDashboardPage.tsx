@@ -139,6 +139,11 @@ export default function AdminDashboardPage() {
               Products
             </button>
           </Link>
+          <Link href="/admin/change-password">
+            <button className="text-xs text-white/70 hover:text-accent transition-colors">
+              Change Password
+            </button>
+          </Link>          
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-white/60">{session?.email}</span>

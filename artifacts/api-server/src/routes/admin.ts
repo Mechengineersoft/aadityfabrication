@@ -3,6 +3,7 @@ import { db, adminsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { AdminLoginBody } from "@workspace/api-zod";
+import { logger } from "../lib/logger";
 
 declare module "express-session" {
   interface SessionData {
@@ -11,6 +12,92 @@ declare module "express-session" {
 }
 
 const router = Router();
+
+// ─── In-memory OTP store (cleared on server restart) ───────────────────────
+// Map<adminEmail, { otp, expiresAt }>
+const otpStore = new Map<string, { otp: string; expiresAt: number }>();
+
+function generateOtp(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+async function sendOtpViaEmail(toEmail: string, otp: string): Promise<void> {
+  try {
+    const appPassword = process.env.GMAIL_APP_PASSWORD;
+    if (!appPassword) { logger.warn("GMAIL_APP_PASSWORD not set — skipping OTP email"); return; }
+    const nodemailer = await import("nodemailer");
+    const transporter = nodemailer.default.createTransport({
+      service: "gmail",
+      auth: { user: "mechengineersoft@gmail.com", pass: appPassword },
+    });
+    await transporter.sendMail({
+      from: '"Aadity Fabrication Works" <mechengineersoft@gmail.com>',
+      to: toEmail,
+      subject: "Admin OTP – Aadity Fabrication Works",
+      text: `Your OTP to change admin password is: ${otp}\n\nThis OTP expires in 10 minutes. Do not share it with anyone.`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto">
+        <div style="background:#2C3E50;color:#fff;padding:16px 24px;border-radius:6px 6px 0 0">
+          <h2 style="margin:0;font-size:18px">Admin OTP – Aadity Fabrication Works</h2>
+        </div>
+        <div style="padding:24px;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px">
+          <p>Your one-time password to change the admin account password:</p>
+          <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#E67E22;text-align:center;padding:16px 0">${otp}</div>
+          <p style="color:#888;font-size:12px">This OTP is valid for 10 minutes. Never share it with anyone.</p>
+        </div>
+      </div>`,
+    });
+    logger.info({ to: toEmail }, "OTP email sent");
+  } catch (err) {
+    logger.error(err, "Failed to send OTP email");
+  }
+}
+
+async function sendOtpViaWhatsApp(otp: string): Promise<void> {
+  try {
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+    const adminPhone = "918521122964";
+    if (!phoneNumberId || !accessToken) { logger.warn("WhatsApp not configured — skipping OTP WhatsApp"); return; }
+    const body = {
+      messaging_product: "whatsapp",
+      to: adminPhone,
+      type: "text",
+      text: { body: `🔐 *Aadity Fabrication Works – Admin OTP*\n\nYour OTP: *${otp}*\n\nValid for 10 minutes. Do not share this with anyone.` },
+    };
+    const response = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) { const err = await response.text(); logger.error({ status: response.status, body: err }, "WhatsApp OTP error"); }
+    else logger.info("OTP WhatsApp sent");
+  } catch (err) {
+    logger.error(err, "Failed to send OTP via WhatsApp");
+  }
+}
+
+async function sendOtpViaTelegram(otp: string): Promise<void> {
+  try {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (!botToken || !chatId) { logger.warn("Telegram not configured — skipping OTP Telegram"); return; }
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: `🔐 *Aadity Fabrication Works – Admin OTP*\n\nYour OTP: *${otp}*\n\nValid for 10 minutes\\. Do not share this with anyone\\.`,
+        parse_mode: "MarkdownV2",
+      }),
+    });
+    if (!response.ok) { const err = await response.text(); logger.error({ status: response.status, body: err }, "Telegram OTP error"); }
+    else logger.info("OTP Telegram sent");
+  } catch (err) {
+    logger.error(err, "Failed to send OTP via Telegram");
+  }
+}
+
+// ─── Auth routes ─────────────────────────────────────────────────────────────
 
 // POST /api/admin/login
 router.post("/login", async (req, res) => {
@@ -66,6 +153,86 @@ router.get("/me", async (req, res) => {
     res.json({ authenticated: true, email: req.session.adminEmail });
   } else {
     res.status(401).json({ error: "Not authenticated" });
+  }
+});
+
+// ─── OTP + Change-password routes ────────────────────────────────────────────
+
+// POST /api/admin/request-otp
+// Generates a 6-digit OTP and sends it via Email, WhatsApp, and Telegram.
+router.post("/request-otp", async (req, res) => {
+  if (!req.session.adminEmail) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+
+  const email = req.session.adminEmail;
+  const otp = generateOtp();
+  otpStore.set(email, { otp, expiresAt: Date.now() + 10 * 60 * 1000 });
+
+  // Send to all configured channels concurrently (best-effort)
+  await Promise.all([
+    sendOtpViaEmail(email, otp),
+    sendOtpViaWhatsApp(otp),
+    sendOtpViaTelegram(otp),
+  ]);
+
+  req.log.info({ email }, "OTP requested");
+  res.json({ sent: true, message: "OTP sent via Email, WhatsApp, and Telegram" });
+});
+
+// POST /api/admin/change-password
+// Verifies OTP and updates the password.
+router.post("/change-password", async (req, res) => {
+  if (!req.session.adminEmail) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+
+  const { otp, newPassword } = req.body as { otp?: string; newPassword?: string };
+
+  if (!otp || !newPassword) {
+    res.status(400).json({ error: "OTP and new password are required" });
+    return;
+  }
+
+  if (newPassword.length < 8) {
+    res.status(400).json({ error: "Password must be at least 8 characters" });
+    return;
+  }
+
+  const email = req.session.adminEmail;
+  const stored = otpStore.get(email);
+
+  if (!stored) {
+    res.status(400).json({ error: "No OTP requested. Please request one first." });
+    return;
+  }
+
+  if (Date.now() > stored.expiresAt) {
+    otpStore.delete(email);
+    res.status(400).json({ error: "OTP has expired. Please request a new one." });
+    return;
+  }
+
+  if (stored.otp !== otp.trim()) {
+    res.status(400).json({ error: "Incorrect OTP. Please try again." });
+    return;
+  }
+
+  try {
+    const hash = await bcrypt.hash(newPassword, 12);
+    await db
+      .update(adminsTable)
+      .set({ passwordHash: hash })
+      .where(eq(adminsTable.email, email));
+
+    otpStore.delete(email);
+    req.log.info({ email }, "Admin password changed successfully");
+    res.json({ success: true, message: "Password changed successfully" });
+  } catch (err) {
+    req.log.error(err, "Failed to update password");
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

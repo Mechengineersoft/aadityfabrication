@@ -9,7 +9,7 @@ const milestones = [
   { year: "2014", label: "Founded", desc: "Established in Kallubalu, Bangalore with a focus on structural fabrication." },
   { year: "2015", label: "EOT Cranes", desc: "Expanded into Electric Overhead Traveling crane manufacturing." },
   { year: "2020", label: "Growth", desc: "Scaled to 50+ industrial shed and crane projects across Bangalore and Karnataka." },
-  { year: "2026", label: "Today", desc: "12 years of service, 200+ projects completed, verified on Justdial." },
+  { year: "2026", label: "Today", desc: "12 years of service, 200+ projects completed, verified on IndiaMART and Justdial." },
 ];
 
 const stats = [

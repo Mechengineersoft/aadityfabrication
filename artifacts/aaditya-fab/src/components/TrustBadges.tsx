@@ -2,7 +2,7 @@ import { Shield, Award, MapPin, CheckCircle } from "lucide-react";
 
 const badges = [
   { icon: Award, label: "12 Years in Business", sub: "Est. 2014" },
-  { icon: Shield, label: "Verified Business", sub: "Justdial Claimed" },
+  { icon: Shield, label: "Verified Business", sub: "IndiaMART and Justdial Claimed" },
   { icon: MapPin, label: "Bangalore Based", sub: "Kallubalu, Bangalore" },
   { icon: CheckCircle, label: "Industrial Experts", sub: "Cranes & Sheds" },
 ];

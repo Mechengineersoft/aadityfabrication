@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-accent shrink-0" />
-                <span>Mon–Sat, Open until 6:00 pm</span>
+                <span>Mon–Sat, Open 9:00 am to 6:00 pm</span>
               </li>
             </ul>
           </div>
@@ -79,7 +79,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-primary-foreground/50">
           <p>© {new Date().getFullYear()} Aadity Fabrication Works. All rights reserved.</p>
-          <p>Kallubalu, Bangalore — Est. 2012</p>
+          <p>Kallubalu, Bangalore — Est. 2014</p>
         </div>
       </div>
     </footer>

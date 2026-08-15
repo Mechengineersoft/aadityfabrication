@@ -106,7 +106,7 @@ export default function HomePage() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-accent/20 text-accent px-3 py-1.5 rounded-full text-sm font-medium mb-6">
               <Shield className="w-4 h-4" />
-              12 Years in Business — Established 2012
+              12 Years in Business — Established 2014
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
               Aadity Fabrication Works

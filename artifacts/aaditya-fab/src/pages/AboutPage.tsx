@@ -15,7 +15,7 @@ const milestones = [
 const stats = [
   { value: "12+", label: "Years in Business" },
   { value: "200+", label: "Projects Completed" },
-  { value: "80T", label: "Max Crane Capacity" },
+  { value: "100T", label: "Max Crane Capacity" },
   { value: "24h", label: "Quote Turnaround" },
 ];
 
@@ -60,10 +60,10 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-4">Our Story</h2>
               <div className="prose prose-sm text-muted-foreground space-y-4">
                 <p>
-                  Founded in 2012, Aadity Fabrication Works has spent over a decade serving Bangalore's industrial sector from our manufacturing facility beside Nandana Layout, Kallubalu. What started as a general fabrication shop has grown into a full-service crane and shed fabrication company trusted by factories, warehouses, and construction companies across Karnataka.
+                  Founded by Vijay Lal Prajapati in 2014, Aadity Fabrication Works has spent over a decade serving Bangalore's industrial sector from our manufacturing facility beside Nandana Layout, Kallubalu. What started as a general fabrication shop has grown into a full-service crane and shed fabrication company trusted by factories, warehouses, and construction companies across Karnataka.
                 </p>
                 <p>
-                  Our facility is equipped for the full lifecycle of industrial crane manufacturing — from structural steel cutting and forming to electrical panel assembly, painting, and site commissioning. We manufacture EOT cranes from 1T to 50T capacity and install industrial sheds spanning up to 60 metres.
+                  Our facility is equipped for the full lifecycle of industrial crane manufacturing — from structural steel cutting and forming to electrical panel assembly, painting, and site commissioning. We manufacture EOT cranes from 1T to 100T capacity and install industrial sheds spanning up to 60 metres.
                 </p>
                 <p>
                   Over 12 years, we have earned the trust of our clients not through advertising but through on-time delivery, honest pricing, and work that holds up under continuous industrial use. Our after-sales rework and modernization services keep equipment running for decades.
@@ -100,7 +100,7 @@ export default function AboutPage() {
                       <Clock className="w-4 h-4 text-accent shrink-0" />
                       <div>
                         <p className="font-medium">Business Hours</p>
-                        <p className="text-muted-foreground">Monday to Saturday — Open until 6:00 pm</p>
+                        <p className="text-muted-foreground">Monday to Saturday — Open 9:00 am to 6:00 pm</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -127,11 +127,11 @@ export default function AboutPage() {
                   <h3 className="font-semibold text-base mb-3">Manufacturing Capabilities</h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     {[
-                      "EOT Crane fabrication — 1T to 50T",
-                      "Industrial sheds — up to 60m span",
+                      "EOT Crane fabrication — 1T to 100T",
+                      "Industrial sheds — up to 35m span",
                       "MIG, TIG, and arc welding",
                       "Electrical panel assembly & wiring",
-                      "Sandblasting and industrial painting",
+                      "Industrial painting",
                       "VFD drive installation and commissioning",
                       "On-site installation and testing",
                     ].map((c) => (

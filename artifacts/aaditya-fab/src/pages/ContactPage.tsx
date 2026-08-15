@@ -134,7 +134,7 @@ export default function ContactPage() {
             Thank you. We will respond within 24 hours with a detailed quote.
           </p>
           <p className="text-sm text-muted-foreground mt-2">
-            Business hours: Monday–Saturday, until 6:00 pm
+            Business hours: Monday–Saturday, 9:00 am to 6:00 pm
           </p>
           <Button
             className="mt-6 bg-accent hover:bg-accent/90 text-white"
@@ -180,7 +180,7 @@ export default function ContactPage() {
                 {
                   Icon: Clock,
                   label: "Hours",
-                  value: "Monday–Saturday, Open until 6:00 pm",
+                  value: "Monday–Saturday, Open 9:00 am to 6:00 pm",
                 },
               ].map((c) => (
                 <Card key={c.label} className="border-border">

@@ -137,7 +137,7 @@ export default function HomePage() {
             <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-accent" /> Beside Nandana Layout, Kallubalu, Bangalore</span>
             <span className="flex items-center gap-1.5"><Phone className="w-4 h-4 text-accent" /> +91-9019-565420</span>
             <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-accent" /> aadityfabricationworks@gmail.com</span>
-            <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-accent" /> Open until 6:00 pm</span>
+            <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-accent" /> Open 9:00 am to 6:00 pm</span>
           </div>
         </div>
       </section>

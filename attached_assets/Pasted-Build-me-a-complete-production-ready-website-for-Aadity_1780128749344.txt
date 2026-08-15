@@ -6,7 +6,7 @@ Build me a complete, production-ready website for "Aadity Fabrication Works" - a
 - Location: Beside Nandana Layout, Kallubalu, Bangalore
 - Years in Business: 12 Years
 - Status: Claimed business (verified)
-- Hours: Open until 6:00 pm
+- Hours: Open 9:00 am to 6:00 pm
 - Categories: Industrial fabrication, crane manufacturing, shed fabrication
 
 ## SERVICES THEY OFFER (Based on my earlier description + fabrication focus):
@@ -36,7 +36,7 @@ Build me a complete, production-ready website for "Aadity Fabrication Works" - a
    - Location: "Kallubalu, Bangalore"
    - Services overview grid (6 services as listed above)
    - Call-to-action: "Get a Free Quote" button
-   - Footer with business hours: "Open until 6:00 pm"
+   - Footer with business hours: "Open 9:00 am to 6:00 pm"
 
 2. **Services Page**
    - Detailed page for each service:
@@ -66,7 +66,7 @@ Build me a complete, production-ready website for "Aadity Fabrication Works" - a
 
 6. **Contact & Inquiry Page**
    - Physical address: Beside Nandana Layout, Kallubalu, Bangalore
-   - Business hours: Open until 6:00 pm
+   - Business hours: Open 9:00 to 6:00 pm
    - Phone number (show placeholder: +91XXXXXXXXXX)
    - Enquiry form with specific fields:
      - Name, Company Name, Phone, Email

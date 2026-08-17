@@ -1,6 +1,6 @@
 import { logger } from "./logger";
 
-const OWNER_EMAIL = "mechengineersoft@gmail.com";
+const OWNER_EMAIL = "zeeshan49ahmad@gmail.com";
 
 interface InquiryDetails {
   name: string;

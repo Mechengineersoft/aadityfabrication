@@ -59,7 +59,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-primary-foreground/70">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-accent mt-0.5 shrink-0" />
-                <span>Beside Nandana Layout, Kallubalu, Bangalore</span>
+                <span>No. 93 Marthalingapura Road Kalubalu Village, Jigani Hobli, Anekal Taluk, Bengaluru, Bengaluru Urban, Karnataka - 560105</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent shrink-0" />

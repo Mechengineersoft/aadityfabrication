@@ -169,7 +169,7 @@ export default function ContactPage() {
                 {
                   Icon: MapPin,
                   label: "Address",
-                  value: "Beside Nandana Layout, Kallubalu, Bangalore",
+                  value: "No. 93 Marthalingapura Road Kalubalu Village, Jigani Hobli, Anekal Taluk, Bengaluru, Bengaluru Urban, Karnataka - 560105",
                 },
                 { Icon: Phone, label: "Phone", value: "+91-9019-565420" },
                 {

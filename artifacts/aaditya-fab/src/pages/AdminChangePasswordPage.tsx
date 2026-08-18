@@ -151,7 +151,7 @@ export default function AdminChangePasswordPage() {
               <div className="rounded-lg bg-muted/60 border border-border p-4 text-sm space-y-1.5">
                 <p className="font-semibold text-foreground">OTP will be sent to:</p>
                 <p className="text-muted-foreground">📧 Email: <span className="text-foreground">{session?.email}</span></p>
-                <p className="text-muted-foreground">📱 WhatsApp: +91-9019565420 (if configured)</p>
+                <p className="text-muted-foreground">📱 WhatsApp: +91-8521122964 (if configured)</p>
                 <p className="text-muted-foreground">✈️ Telegram: your registered chat (if configured)</p>
               </div>
 

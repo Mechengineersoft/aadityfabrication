@@ -1,7 +1,7 @@
 import { logger } from "./logger";
 
 const WHATSAPP_API_URL = "https://graph.facebook.com/v21.0";
-const ADMIN_PHONE = "918697080586";
+const ADMIN_PHONE = "919019565420";
 
 interface InquiryDetails {
   name: string;

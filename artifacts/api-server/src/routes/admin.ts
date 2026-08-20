@@ -26,7 +26,7 @@ async function sendOtpViaWhatsApp(otp: string): Promise<void> {
   try {
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
-    const adminPhone = "918521122964";
+    const adminPhone = "918697080586";
     if (!phoneNumberId || !accessToken) { logger.warn("WhatsApp not configured — skipping OTP WhatsApp"); return; }
     const body = {
       messaging_product: "whatsapp",
